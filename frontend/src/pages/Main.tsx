@@ -4,20 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import FoodItemCard from '../components/FoodItemCard';
 import OrderCard from '../components/OrderCard';
 import { FoodItem, Order } from '../models';
-import { getAllFood, getAvailableFood } from '../services/adminService';
-import { getUserOrders } from '../services/orderService';
+import { getAvailableFood } from '../services/adminService';
+import { getUserOrders, getAllOrders } from '../services/orderService';
 
 const Main: React.FC = () => {
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
   const [activeOrders, setActiveOrders] = useState<Order[]>([]);
-  const [completedOrders, setCompletedOrders] = useState<Order[]>([]);
+  const [recentOrders, setRecentOrders] = useState<Order[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFoodItems = async () => {
       try {
         const response = await getAvailableFood();
-        console.log(await getAllFood())
         setFoodItems(response.available_food);
       } catch (error: any) {
         console.error('Error fetching food items:', error.response?.data || error.message);
@@ -26,13 +25,13 @@ const Main: React.FC = () => {
 
     const fetchOrders = async () => {
       try {
-        const response = await getUserOrders();
-        const active = response.orders.filter((order: Order) => order.status !== 'completed');
-        const completed = response.orders
-          .filter((order: Order) => order.status === 'completed')
-          .slice(0, 2);
+        const userOrdersResponse = await getUserOrders();
+        const active = userOrdersResponse.orders.filter((order: Order) => order.status === 'pending' || order.status === 'confirmed');
         setActiveOrders(active);
-        setCompletedOrders(completed);
+
+        const recentOrdersResponse = await getAllOrders(1, 2);
+        const recent = recentOrdersResponse.orders.filter((order: Order) => order.status === 'completed' || order.status === 'cancelled');
+        setRecentOrders(recent);
       } catch (error: any) {
         console.error('Error fetching orders:', error.response?.data || error.message);
       }
@@ -66,24 +65,36 @@ const Main: React.FC = () => {
       <Typography variant="h4" align="center" gutterBottom sx={{ mt: 5 }}>
         Active Orders
       </Typography>
-      <Grid container spacing={3} justifyContent="center">
-        {activeOrders.map((order) => (
-          <Grid item xs={12} sm={6} md={4} key={order.id}>
-            <OrderCard order={order} onViewOrder={handleViewOrder} />
-          </Grid>
-        ))}
-      </Grid>
+      {activeOrders.length > 0 ? (
+        <Grid container spacing={3} justifyContent="center">
+          {activeOrders.map((order) => (
+            <Grid item xs={12} sm={6} md={4} key={order.id}>
+              <OrderCard order={order} onViewOrder={handleViewOrder} />
+            </Grid>
+          ))}
+        </Grid>
+      ) : (
+        <Typography variant="body1" align="center" sx={{ mt: 2 }}>
+          No active orders.
+        </Typography>
+      )}
 
       <Typography variant="h4" align="center" gutterBottom sx={{ mt: 5 }}>
-        Recently Completed Orders
+        Recent Orders
       </Typography>
-      <Grid container spacing={3} justifyContent="center">
-        {completedOrders.map((order) => (
-          <Grid item xs={12} sm={6} md={4} key={order.id}>
-            <OrderCard order={order} onViewOrder={handleViewOrder} />
-          </Grid>
-        ))}
-      </Grid>
+      {recentOrders.length > 0 ? (
+        <Grid container spacing={3} justifyContent="center">
+          {recentOrders.map((order) => (
+            <Grid item xs={12} sm={6} md={4} key={order.id}>
+              <OrderCard order={order} onViewOrder={handleViewOrder} />
+            </Grid>
+          ))}
+        </Grid>
+      ) : (
+        <Typography variant="body1" align="center" sx={{ mt: 2 }}>
+          No recent orders to display.
+        </Typography>
+      )}
     </Container>
   );
 };

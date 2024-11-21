@@ -9,25 +9,50 @@ interface FoodItemCardProps {
 
 const FoodItemCard: React.FC<FoodItemCardProps> = ({ food, onPlaceOrder }) => {
   return (
-    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-      <CardContent>
-        <Typography variant="h6">{food.name}</Typography>
-        <Typography variant="body2" sx={{ mt: 1 }}>
+    <Card
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        padding: 2,
+        boxShadow: 3,
+        borderRadius: 2,
+        backgroundColor: '#ffffff',
+      }}
+    >
+      <CardContent sx={{ textAlign: 'center' }}>
+        <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>
+          {food.name}
+        </Typography>
+
+        <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
           {food.description}
         </Typography>
-        <Typography variant="body2" sx={{ mt: 1 }}>
-          Price: ${food.price.toFixed(2)}
+
+        <Typography variant="body1" sx={{ mb: 1 }}>
+          <strong>Price:</strong> ${food.price.toFixed(2)}
         </Typography>
-        <Typography variant="body2">
-          Available: {food.quantity_available || 'Unlimited'}
+
+        <Typography variant="body1">
+          <strong>Available:</strong> {food.quantity_available || 'Unlimited'}
         </Typography>
       </CardContent>
-      <CardActions>
+
+      <CardActions sx={{ justifyContent: 'center', mt: 2 }}>
         <Button
           variant="contained"
-          size="small"
+          size="medium"
           onClick={() => onPlaceOrder(food.id)}
-          sx={{ ml: 1, mb: 1 }}
+          sx={{
+            borderRadius: '20px',
+            textTransform: 'none',
+            paddingX: 3,
+            backgroundColor: '#007bff',
+            '&:hover': {
+              backgroundColor: '#0056b3',
+            },
+          }}
         >
           Place Order
         </Button>

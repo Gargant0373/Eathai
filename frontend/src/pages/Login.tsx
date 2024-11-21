@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { TextField, Button, Box, Link } from '@mui/material';
+import { Typography, TextField, Button, Box, Link } from '@mui/material';
 import { loginUser } from '../services/authService';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,30 +24,61 @@ const Login: React.FC = () => {
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ width: '300px', margin: 'auto', mt: 5 }}>
-      <TextField
-        {...register('email')}
-        label="Email"
-        fullWidth
-        margin="normal"
-        type="email"
-        required
-      />
-      <TextField
-        {...register('password')}
-        label="Password"
-        fullWidth
-        margin="normal"
-        type="password"
-        required
-      />
-      <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
-        Login
-      </Button>
-      <Box mt={2}>
-        <Link href="/register" variant="body2">
-          Don't have an account? Register
-        </Link>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        backgroundColor: '#f5f5f5',
+      }}
+    >
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        sx={{
+          backgroundColor: 'white',
+          padding: 4,
+          borderRadius: 2,
+          boxShadow: 3,
+          width: '300px',
+          textAlign: 'center',
+        }}
+      >
+        <img 
+          src="/logo.png" 
+          alt="Logo" 
+          style={{ width: '100px', marginBottom: '20px' }} 
+        />
+
+        <Typography variant="h5" gutterBottom>
+          Login
+        </Typography>
+        <TextField
+          {...register('email')}
+          label="Email"
+          fullWidth
+          margin="normal"
+          type="email"
+          required
+        />
+        <TextField
+          {...register('password')}
+          label="Password"
+          fullWidth
+          margin="normal"
+          type="password"
+          required
+        />
+        <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
+          Login
+        </Button>
+
+        <Box mt={2}>
+          <Link href="/register" variant="body2">
+            Don't have an account? Register
+          </Link>
+        </Box>
       </Box>
     </Box>
   );

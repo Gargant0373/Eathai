@@ -51,12 +51,12 @@ def cancel_order(order_id):
     food = Food.query.get(order.food_id)
     food.quantity_available += order.quantity
 
-    db.session.delete(order)
+    order.status = 'cancelled'
     db.session.commit()
 
     return jsonify({"message": "Order canceled successfully"}), 200
 
-@orders_blueprint.route('/orders', methods=['GET'])
+@orders_blueprint.route('/user', methods=['GET'])
 @token_required
 def get_user_orders():
     from app.models import Order, Food
@@ -80,7 +80,7 @@ def get_user_orders():
 
     return jsonify({"orders": order_list}), 200
 
-@orders_blueprint.route('/admin/orders', methods=['GET'])
+@orders_blueprint.route('/all', methods=['GET'])
 @token_required
 def get_all_orders():
     from app.models import Order, Food, User
@@ -101,7 +101,7 @@ def get_all_orders():
 
     return jsonify({"orders": order_list}), 200
 
-@orders_blueprint.route('/admin/orders/<int:order_id>', methods=['PATCH'])
+@orders_blueprint.route('/order/<int:order_id>', methods=['PATCH'])
 @token_required
 def update_order_status(order_id):
     from app.models import Order
@@ -111,7 +111,7 @@ def update_order_status(order_id):
     data = request.json
     new_status = data.get('status')
 
-    if new_status not in ['pending', 'confirmed', 'completed']:
+    if new_status not in ['pending', 'confirmed', 'completed', 'cancelled']:
         return jsonify({"error": "Invalid status"}), 400
 
     order = Order.query.get(order_id)

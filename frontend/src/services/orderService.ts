@@ -11,16 +11,21 @@ export const cancelOrder = async (orderId: number) => {
 };
 
 export const getUserOrders = async () => {
-  const response = await api.get('/orders/orders');
+  const response = await api.get('/orders/user');
   return response.data;
 };
 
-export const getAllOrders = async () => {
-  const response = await api.get('/orders/admin/orders');
+export const getAllOrders = async (page: number = 1, perPage: number = 5) => {
+  const response = await api.get('/orders/all', {
+    params: {
+      page,
+      per_page: perPage,
+    },
+  });
   return response.data;
 };
 
 export const updateOrderStatus = async (orderId: number, status: string) => {
-  const response = await api.patch(`/orders/admin/orders/${orderId}`, { status });
+  const response = await api.patch(`/orders/order/${orderId}`, { status });
   return response.data;
 };
