@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { TextField, Button, Box, Typography } from '@mui/material';
+import { TextField, Button, Box, Typography, IconButton } from '@mui/material';
 import { LocalizationProvider, DateTimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { addFood } from '../services/adminService';
 import { useNavigate } from 'react-router-dom';
 
@@ -49,11 +50,25 @@ const CreateFood: React.FC = () => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Box sx={{ maxWidth: 600, margin: 'auto', mt: 5 }}>
-        <Typography variant="h4" align="center" gutterBottom>
-          Add Food Item
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
+      <Box sx={{ maxWidth: 700, margin: 'auto', mt: 5, px: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+          <IconButton onClick={() => navigate('/admin')}>
+            <ArrowBackIcon />
+          </IconButton>
+          <Typography variant="h4" sx={{ fontWeight: 'bold', ml: 2 }}>
+            Add Food Item
+          </Typography>
+        </Box>
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          sx={{
+            padding: 3,
+            borderRadius: 4,
+            boxShadow: 3,
+            backgroundColor: '#f9f9f9',
+          }}
+        >
           <TextField
             {...register('name', { required: true })}
             label="Name"
@@ -89,14 +104,29 @@ const CreateFood: React.FC = () => {
             value={availableDate}
             onChange={(newValue) => setAvailableDate(newValue || dayjs())}
             slots={{ textField: TextField }}
+            sx={{ mt: 3, width: '100%' }}
           />
           <DateTimePicker
             label="Registration Closing Date"
             value={registrationClosing}
             onChange={(newValue) => setRegistrationClosing(newValue)}
             slots={{ textField: TextField }}
+            sx={{ mt: 3, width: '100%' }}
           />
-          <Button type="submit" variant="contained" fullWidth sx={{ mt: 3 }}>
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            sx={{
+              mt: 3,
+              borderRadius: 2,
+              textTransform: 'none',
+              backgroundColor: '#007bff',
+              '&:hover': {
+                backgroundColor: '#0056b3',
+              },
+            }}
+          >
             Add Food
           </Button>
         </Box>

@@ -1,4 +1,4 @@
-import { Container, Grid, Typography } from '@mui/material';
+import { Container, Grid, Typography, Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FoodItemCard from '../components/FoodItemCard';
@@ -6,6 +6,7 @@ import OrderCard from '../components/OrderCard';
 import { FoodItem, Order } from '../models';
 import { getAvailableFood } from '../services/adminService';
 import { getUserOrders, getAllOrders } from '../services/orderService';
+import Navbar from '../components/Navbar';
 
 const Main: React.FC = () => {
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
@@ -49,11 +50,18 @@ const Main: React.FC = () => {
     navigate(`/order/view/${orderId}`);
   };
 
-  return (
+  return <>
+    <Navbar />
     <Container sx={{ py: 5 }}>
-      <Typography variant="h4" align="center" gutterBottom>
-        Available Food
-      </Typography>
+      <Box sx={{ textAlign: 'center', mb: 5 }}>
+        <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2 }}>
+          Available Food
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          Discover and order your favorite dishes
+        </Typography>
+      </Box>
+
       <Grid container spacing={3} justifyContent="center">
         {foodItems.map((food) => (
           <Grid item xs={12} sm={6} md={4} key={food.id}>
@@ -62,9 +70,15 @@ const Main: React.FC = () => {
         ))}
       </Grid>
 
-      <Typography variant="h4" align="center" gutterBottom sx={{ mt: 5 }}>
-        Active Orders
-      </Typography>
+      <Box sx={{ textAlign: 'center', mt: 8, mb: 5 }}>
+        <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2 }}>
+          Active Orders
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          Keep track of your ongoing orders
+        </Typography>
+      </Box>
+
       {activeOrders.length > 0 ? (
         <Grid container spacing={3} justifyContent="center">
           {activeOrders.map((order) => (
@@ -74,14 +88,20 @@ const Main: React.FC = () => {
           ))}
         </Grid>
       ) : (
-        <Typography variant="body1" align="center" sx={{ mt: 2 }}>
+        <Typography variant="body1" align="center" color="text.secondary" sx={{ mt: 2 }}>
           No active orders.
         </Typography>
       )}
 
-      <Typography variant="h4" align="center" gutterBottom sx={{ mt: 5 }}>
-        Recent Orders
-      </Typography>
+      <Box sx={{ textAlign: 'center', mt: 8, mb: 5 }}>
+        <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2 }}>
+          Recent Orders
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          View the history of your recent orders
+        </Typography>
+      </Box>
+
       {recentOrders.length > 0 ? (
         <Grid container spacing={3} justifyContent="center">
           {recentOrders.map((order) => (
@@ -91,12 +111,12 @@ const Main: React.FC = () => {
           ))}
         </Grid>
       ) : (
-        <Typography variant="body1" align="center" sx={{ mt: 2 }}>
+        <Typography variant="body1" align="center" color="text.secondary" sx={{ mt: 2 }}>
           No recent orders to display.
         </Typography>
       )}
     </Container>
-  );
+    </>;
 };
 
 export default Main;

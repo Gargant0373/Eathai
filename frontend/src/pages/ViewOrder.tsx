@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Typography, Box, Button, Card, CardContent } from '@mui/material';
+import { Typography, Box, Button, Card, CardContent, Grid, Chip, IconButton } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { getUserOrders, cancelOrder } from '../services/orderService';
 import { Order } from '../models';
 import dayjs from 'dayjs';
+import PendingIcon from '@mui/icons-material/HourglassEmpty';
+import DoneIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 const ViewOrder: React.FC = () => {
-  const { id } = useParams<{ id: string }>(); 
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [order, setOrder] = useState<Order | null>(null);
 
@@ -17,7 +22,7 @@ const ViewOrder: React.FC = () => {
         const selectedOrder = response.orders.find((o: Order) => o.id === parseInt(id!));
         if (!selectedOrder) {
           alert('Order not found.');
-          navigate('/main'); 
+          navigate('/main');
         }
         setOrder(selectedOrder);
       } catch (error: any) {
@@ -38,50 +43,109 @@ const ViewOrder: React.FC = () => {
     try {
       await cancelOrder(order.id);
       alert('Order canceled successfully!');
-      navigate('/main'); 
+      navigate('/main');
     } catch (error: any) {
       alert(error.response?.data?.error || 'Failed to cancel order.');
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return <PendingIcon sx={{ color: 'orange' }} />;
+      case 'confirmed':
+        return <DoneIcon sx={{ color: 'blue' }} />;
+      case 'completed':
+        return <DoneIcon sx={{ color: 'green' }} />;
+      case 'cancelled':
+        return <CancelIcon sx={{ color: 'red' }} />;
+      default:
+        return <ErrorIcon sx={{ color: 'gray' }} />;
     }
   };
 
   if (!order) return null;
 
   return (
-    <Box sx={{ maxWidth: 600, margin: 'auto', mt: 5 }}>
-      <Card>
-        <CardContent>
-          <Typography variant="h5" gutterBottom>
-            Order Details
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            <strong>Food:</strong> {order.food.name}
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            <strong>Description:</strong> {order.food.description}
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            <strong>Quantity:</strong> {order.quantity}
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            <strong>Status:</strong> {order.status}
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            <strong>Order Date:</strong> {dayjs(order.timestamp).format('DD/MM/YYYY HH:mm')}
-          </Typography>
-        </CardContent>
-      </Card>
+    <Box sx={{ maxWidth: 700, margin: 'auto', mt: 5, px: 2 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+        <IconButton onClick={() => navigate('/main')}>
+          <ArrowBackIcon />
+        </IconButton>
+        <Typography variant="h4" sx={{ fontWeight: 'bold', ml: 2 }}>
+          Order Details
+        </Typography>
+      </Box>
 
-      {order.status === 'pending' && (
-        <Button
-          variant="contained"
-          color="error"
-          fullWidth
-          sx={{ mt: 3 }}
-          onClick={handleCancelOrder}
-        >
-          Cancel Order
-        </Button>
-      )}
+      <Card
+        sx={{
+          padding: 3,
+          borderRadius: 4,
+          boxShadow: 3,
+          backgroundColor: '#f9f9f9',
+        }}
+      >
+        <CardContent>
+          <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#007BFF', mb: 2 }}>
+            {order.food.name}
+          </Typography>
+          <Typography variant="body1" sx={{ color: 'text.secondary', mb: 3 }}>
+            {order.food.description}
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={4}>
+              <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
+                <strong>Quantity:</strong>&nbsp; {order.quantity}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
+                <strong>Status:</strong>&nbsp;
+                <Chip
+                  icon={getStatusIcon(order.status)}
+                  label={order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                  color={
+                    order.status === 'pending'
+                      ? 'warning'
+                      : order.status === 'confirmed'
+                      ? 'primary'
+                      : order.status === 'completed'
+                      ? 'success'
+                      : 'error'
+                  }
+                  size="small"
+                  sx={{ textTransform: 'capitalize' }}
+                />
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
+                <strong>Date:</strong>&nbsp; {dayjs(order.timestamp).format('DD/MM/YYYY HH:mm')}
+              </Typography>
+            </Grid>
+          </Grid>
+        </CardContent>
+
+        {order.status === 'pending' && (
+          <Button
+            variant="contained"
+            color="error"
+            fullWidth
+            sx={{
+              mt: 3,
+              borderRadius: 2,
+              textTransform: 'none',
+              backgroundColor: '#ff5c5c',
+              '&:hover': {
+                backgroundColor: '#ff4040',
+              },
+            }}
+            onClick={handleCancelOrder}
+          >
+            Cancel Order
+          </Button>
+        )}
+      </Card>
     </Box>
   );
 };

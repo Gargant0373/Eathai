@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, CardActions, Typography, Button } from '@mui/material';
+import { Card, CardContent, CardActions, Typography, Button, Grid } from '@mui/material';
 import { FoodItem } from '../models';
 
 interface FoodItemCardProps {
@@ -11,41 +11,46 @@ const FoodItemCard: React.FC<FoodItemCardProps> = ({ food, onPlaceOrder }) => {
   return (
     <Card
       sx={{
-        height: '100%',
+        padding: 3,
+        borderRadius: 4,
+        boxShadow: 3,
+        backgroundColor: '#f9f9f9',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        padding: 2,
-        boxShadow: 3,
-        borderRadius: 2,
-        backgroundColor: '#ffffff',
+        height: '100%',
       }}
     >
-      <CardContent sx={{ textAlign: 'center' }}>
-        <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>
+      <CardContent>
+        <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#007BFF', mb: 2, textAlign: 'center' }}>
           {food.name}
         </Typography>
 
-        <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
+        <Typography variant="body1" sx={{ color: 'text.secondary', mb: 3, textAlign: 'center' }}>
           {food.description}
         </Typography>
 
-        <Typography variant="body1" sx={{ mb: 1 }}>
-          <strong>Price:</strong> ${food.price.toFixed(2)}
-        </Typography>
-
-        <Typography variant="body1">
-          <strong>Available:</strong> {food.quantity_available || 'Unlimited'}
-        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6}>
+            <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <strong>Price:</strong>&nbsp; ${food.price.toFixed(2)}
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <strong>Available:</strong>&nbsp; {food.quantity_available || 'Unlimited'}
+            </Typography>
+          </Grid>
+        </Grid>
       </CardContent>
 
       <CardActions sx={{ justifyContent: 'center', mt: 2 }}>
         <Button
           variant="contained"
-          size="medium"
+          size="large"
           onClick={() => onPlaceOrder(food.id)}
           sx={{
-            borderRadius: '20px',
+            borderRadius: 2,
             textTransform: 'none',
             paddingX: 3,
             backgroundColor: '#007bff',
