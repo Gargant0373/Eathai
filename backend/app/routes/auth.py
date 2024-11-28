@@ -24,8 +24,6 @@ def register():
 
     if is_first_user and is_admin:
         message = "Registration successful. You are the first user and an admin."
-    elif is_first_user:
-        message = "Registration successful. You are the first user but not an admin."
     else:
         message = "Registration requested successfully. Await approval."
 

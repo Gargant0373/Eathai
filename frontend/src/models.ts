@@ -11,6 +11,10 @@ export interface FoodItem {
   export interface Order {
     id: number;
     food: FoodItem;
+    user: {
+      id: number,
+      email: string,
+    }
     quantity: number;
     status: "pending" | "confirmed" | "completed" | "cancelled";
     timestamp: number;

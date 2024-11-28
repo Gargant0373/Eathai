@@ -34,3 +34,8 @@ export const getAllUsers = async (page: number = 1) => {
   const response = await api.get(`/auth/users`, { params: { page } });
   return response.data;
 };
+
+export const getUser = async (userId: number) => {
+  const response = await api.get(`/auth/user/${userId}`);
+  return response.data;
+}

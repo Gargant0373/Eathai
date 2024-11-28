@@ -40,7 +40,6 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-
   return (
     <Box sx={{ maxWidth: 900, margin: 'auto', mt: 5 }}>
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
@@ -93,6 +92,9 @@ const AdminDashboard: React.FC = () => {
                 </Typography>
                 <Typography variant="body1" sx={{ mb: 1 }}>
                   <strong>Quantity:</strong> {order.quantity}
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 1 }}>
+                  <strong>User Email:</strong> {order.user.email}
                 </Typography>
                 <Typography variant="body1" sx={{ mb: 1 }}>
                   <strong>Status:</strong> {order.status.charAt(0).toUpperCase() + order.status.slice(1)}

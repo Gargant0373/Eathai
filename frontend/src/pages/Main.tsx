@@ -30,8 +30,7 @@ const Main: React.FC = () => {
         const active = userOrdersResponse.orders.filter((order: Order) => order.status === 'pending' || order.status === 'confirmed');
         setActiveOrders(active);
 
-        const recentOrdersResponse = await getAllOrders(1, 2);
-        const recent = recentOrdersResponse.orders.filter((order: Order) => order.status === 'completed' || order.status === 'cancelled');
+        const recent = userOrdersResponse.orders.filter((order: Order) => order.status === 'completed' || order.status === 'cancelled');
         setRecentOrders(recent);
       } catch (error: any) {
         console.error('Error fetching orders:', error.response?.data || error.message);

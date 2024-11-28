@@ -3,6 +3,7 @@ from flask import Blueprint, jsonify
 from app import db
 from flask import request
 from app.utils.token_service import token_required
+from app.utils.email_service import send_food_email
 
 admin_blueprint = Blueprint('admin', __name__)
 
@@ -55,6 +56,8 @@ def add_food():
     )
     db.session.add(food)
     db.session.commit()
+    
+    send_food_email(name, description, price, quantity, available_date)
 
     return jsonify({"message": "Food item added successfully", "food": food.name}), 201
 
@@ -96,6 +99,21 @@ def get_all_food():
     ]
 
     return jsonify({"all_food": food_list}), 200
+
+@admin_blueprint.route('/user', methods=['GET'])
+@token_required
+def get_user():
+    from app.models import User
+    if not request.user['is_admin']:
+        return jsonify({"error": "Access forbidden"}), 403
+
+    user_id = request.user['user_id']
+    
+    if not user_id:
+        return jsonify({"error": "User not found"}), 404
+    
+    user = User.query.get(request.user['user_id'])
+    return jsonify({"user": user.email}), 200
 
 @admin_blueprint.route('/available-food', methods=['GET'])
 @token_required

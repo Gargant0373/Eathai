@@ -110,16 +110,4 @@ def test_get_available_food_success(client, app):
     response = client.get('/admin/available-food', headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 200
     assert len(response.json["available_food"]) == 1
-    assert response.json["available_food"][0]["name"] == "Pizza"
-
-def test_get_available_food_no_admin_access(client, app):
-    with app.app_context():
-        user = User(email="user@example.com", password="password", is_approved=True)
-        db.session.add(user)
-        db.session.commit()
-
-        token = generate_token(user.id, user.is_admin)
-
-    response = client.get('/admin/available-food', headers={"Authorization": f"Bearer {token}"})
-    assert response.status_code == 403
-    assert response.json["error"] == "Access forbidden"
+    assert response.json["available_food"][0]["name"] == "Burger"

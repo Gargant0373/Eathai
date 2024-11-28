@@ -4,3 +4,5 @@ flask-bcrypt
 pytest
 flask-testing
 PyJWT
+flask-cors
+python-dotenv

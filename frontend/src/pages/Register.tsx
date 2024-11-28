@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface RegisterForm {
   email: string;
+  username: string;
   password: string;
 }
 
