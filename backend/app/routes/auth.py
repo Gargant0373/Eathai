@@ -28,7 +28,7 @@ def register():
     else:
         message = "Registration requested successfully. Await approval."
 
-    send_user_email(email, "Registration requested successfully. Please wait for approval.")
+    send_user_email(email, "You have successfully registered with our platform! Please wait for approval.")
 
     return jsonify({"message": message}), 201
 
@@ -124,6 +124,7 @@ def delete_user(user_id):
     db.session.delete(user)
     db.session.commit()
 
+    send_user_email(user.email, "Your account has been deleted.")
     return jsonify({"message": f"User with ID {user_id} has been deleted."}), 200
 
 @auth_blueprint.route('/users', methods=['GET'])

@@ -134,14 +134,14 @@ def generate_user_email(email, message):
                 color: white;
                 padding: 10px 0;
             }}
-            .food-details {{
+            .email-details {{
                 margin-top: 20px;
             }}
-            .food-details h3 {{
+            .email-details h3 {{
                 margin: 0;
                 color: #4CAF50;
             }}
-            .food-details p {{
+            .email-details p {{
                 margin: 5px 0;
             }}
             .footer {{
@@ -155,12 +155,11 @@ def generate_user_email(email, message):
     <body>
         <div class="email-container">
             <div class="header">
-                <h1>Welcome to our platform!</h1>
+                <h1>Welcome to our Eathai!</h1>
             </div>
-            <div class="food-details">
-                <p>You have successfully registered with our platform.</p>
-                <p>Your email is: {email}</p>
+            <div class="email-details">
                 <p>{message}</p>
+                <p>Your email is: {email}</p>
             </div>
             <div class="footer">
                 <p>Thank you for using our service!</p>
@@ -173,4 +172,4 @@ def generate_user_email(email, message):
 
 def send_user_email(email, message):
     html_content = generate_user_email(email, message)
-    send_email(email, "Welcome to our platform!", html_content)
+    send_email(email, "Welcome to our Eathai!", html_content)
