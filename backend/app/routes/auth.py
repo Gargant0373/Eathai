@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app import db
 from app.utils.token_service import generate_token, token_required
+from app.utils.email_service import send_user_email
 
 auth_blueprint = Blueprint('auth', __name__)
 
@@ -26,6 +27,8 @@ def register():
         message = "Registration successful. You are the first user and an admin."
     else:
         message = "Registration requested successfully. Await approval."
+
+    send_user_email(email, "Registration requested successfully. Please wait for approval.")
 
     return jsonify({"message": message}), 201
 
@@ -80,6 +83,8 @@ def verify_user(user_id):
     user.is_approved = True
     db.session.commit()
 
+    send_user_email(user.email, "Congratulations! Your registration has been approved.")
+
     return jsonify({"message": f"User with ID {user_id} has been approved."}), 200
 
 
@@ -99,6 +104,7 @@ def make_user_admin(user_id):
     user.is_admin = True
     db.session.commit()
 
+    send_user_email(user.email, "Congratulations! You are now an admin.")
     return jsonify({"message": f"User with ID {user_id} is now an admin."}), 200
 
 

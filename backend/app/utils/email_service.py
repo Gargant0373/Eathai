@@ -111,3 +111,66 @@ def send_food_email(name, description, price, quantity_available, available_date
     
     for user in users:
         send_email(user.email, f"{name} has just been posted!", html_content)
+
+
+def generate_user_email(email, message):
+    html_template = """
+    <html>
+    <head>
+        <style>
+            .email-container {{
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                max-width: 600px;
+                margin: auto;
+                border: 1px solid #ddd;
+                padding: 20px;
+                background-color: #f9f9f9;
+            }}
+            .header {{
+                text-align: center;
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 0;
+            }}
+            .food-details {{
+                margin-top: 20px;
+            }}
+            .food-details h3 {{
+                margin: 0;
+                color: #4CAF50;
+            }}
+            .food-details p {{
+                margin: 5px 0;
+            }}
+            .footer {{
+                text-align: center;
+                margin-top: 20px;
+                font-size: 12px;
+                color: #aaa;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="email-container">
+            <div class="header">
+                <h1>Welcome to our platform!</h1>
+            </div>
+            <div class="food-details">
+                <p>You have successfully registered with our platform.</p>
+                <p>Your email is: {email}</p>
+                <p>{message}</p>
+            </div>
+            <div class="footer">
+                <p>Thank you for using our service!</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    return html_template.format(email=email, message=message)
+
+def send_user_email(email, message):
+    html_content = generate_user_email(email, message)
+    send_email(email, "Welcome to our platform!", html_content)
