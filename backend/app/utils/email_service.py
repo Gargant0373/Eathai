@@ -1,3 +1,4 @@
+import locale
 from datetime import datetime
 import os
 import smtplib
@@ -91,8 +92,19 @@ def generate_food_email(name, description, price, quantity_available, available_
     )
 
 def send_food_email(name, description, price, quantity_available, available_date):
-    time = datetime.fromtimestamp(available_date).strftime("%d/%m/%Y, %H:%M")
-    html_content = generate_food_email(name, description, price, quantity_available, time)
+    time = datetime.fromtimestamp(available_date / 1000)  
+    
+    locale.setlocale(locale.LC_TIME, '')  
+    current_locale = locale.getlocale(locale.LC_TIME)[0]  
+    
+    # Choose date format based on the user's locale
+    if 'United States' in current_locale or 'Canada' in current_locale:
+        date_format = "%m/%d/%Y, %H:%M"  
+    else:
+        date_format = "%d/%m/%Y, %H:%M" 
+    
+    formatted_time = time.strftime(date_format)
+    html_content = generate_food_email(name, description, price, quantity_available, formatted_time)
     
     from app.models import User
     users = User.query.filter_by(is_approved=True).all()

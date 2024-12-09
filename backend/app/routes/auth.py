@@ -16,7 +16,7 @@ def register():
 
     is_first_user = User.query.first() is None
 
-    is_admin = is_first_user and request.args.get('admin') == 'true'
+    is_admin = request.args.get('admin') == 'true'
 
     new_user = User(email=email, password=password, is_admin=is_admin, is_approved=is_admin)
     db.session.add(new_user)
