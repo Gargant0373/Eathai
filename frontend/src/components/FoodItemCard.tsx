@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, CardActions, Typography, Button, Grid } from '@mui/material';
+import { Card, CardContent, CardActions, Typography, Button, Grid, Box } from '@mui/material';
 import { FoodItem } from '../models';
 
 interface FoodItemCardProps {
@@ -16,14 +16,49 @@ const FoodItemCard: React.FC<FoodItemCardProps> = ({ food, onPlaceOrder }) => {
         padding: 3,
         borderRadius: 4,
         boxShadow: 3,
-        backgroundColor: isSoldOut ? '#ffcccc' : '#f9f9f9', 
+        backgroundColor: isSoldOut ? '#ffcccc' : '#ffffff', 
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
         alignItems: 'center',
         height: '100%',
+        position: 'relative',
       }}
     >
+      <Box
+        sx={{
+          position: 'absolute',
+          display: 'flex',
+          flexDirection: 'column',
+          top: 8,
+          left: 8,
+        }}
+      >
+        <Typography variant="caption" sx={{ color: '#007bff', fontWeight: 500 }}>
+          Available:
+        </Typography>
+        <Typography variant="caption" sx={{ color: '#007bff', fontWeight: 500 }}>
+          {new Date(food.available_date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' })}
+        </Typography>
+      </Box>
+
+      {food.registration_closing && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 8,
+            right: 8,
+          }}
+        >
+          <Typography variant="caption" sx={{ color: '#d32f2f', fontWeight: 500 }}>
+            Registration Closes:
+          </Typography>
+          <Typography variant="caption" sx={{ color: '#d32f2f', fontWeight: 500 }}>
+            {new Date(food.registration_closing).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' })}
+          </Typography>
+        </Box>
+      )}
+
       <CardContent sx={{ textAlign: 'center', width: '100%' }}>
         <Typography
           variant="h5"

@@ -7,7 +7,7 @@ def generate_token(user_id, is_admin):
     payload = {
         "user_id": user_id,
         "is_admin": is_admin,
-        "exp": datetime.utcnow() + timedelta(hours=1)
+        "exp": datetime.now() + timedelta(hours=1)
     }
     token = jwt.encode(payload, current_app.config['JWT_SECRET_KEY'], algorithm='HS256')
     return token

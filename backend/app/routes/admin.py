@@ -120,12 +120,11 @@ def get_user():
 def get_available_food():
     from app.models import Food
 
-    current_time = datetime.now().timestamp()
+    current_time = int(datetime.now().timestamp() * 1000)
     available_food = Food.query.filter(
-        Food.available_date >= current_time,
-        (Food.registration_closing.is_(None) | (Food.registration_closing >= current_time))
+        Food.available_date >= current_time
     ).all()
-
+    
     food_list = [
         {
             "id": food.id,
