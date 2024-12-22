@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { TextField, Button, Box, Link, Typography } from '@mui/material';
 import { registerUser } from '../services/authService';
@@ -8,19 +8,26 @@ interface RegisterForm {
   email: string;
   username: string;
   password: string;
+  confirmPassword: string;
 }
 
 const Register: React.FC = () => {
-  const { register, handleSubmit } = useForm<RegisterForm>();
+  const { register, handleSubmit, watch } = useForm<RegisterForm>();
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const onSubmit = async (data: RegisterForm) => {
+    if (data.password !== data.confirmPassword) {
+      setErrorMessage('Passwords do not match.');
+      return;
+    }
+
     try {
       await registerUser(data.email, data.password);
       alert('Registration successful! Please wait for approval.');
       navigate('/');
     } catch (error: any) {
-      alert(error.response?.data?.error || 'Registration failed');
+      setErrorMessage(error.response?.data?.error || 'Registration failed');
     }
   };
 
@@ -55,6 +62,13 @@ const Register: React.FC = () => {
         <Typography variant="h5" gutterBottom>
           Register
         </Typography>
+
+        {errorMessage && (
+          <Typography variant="body2" color="error" gutterBottom>
+            {errorMessage}
+          </Typography>
+        )}
+
         <TextField
           {...register('email')}
           label="Email"
@@ -71,6 +85,15 @@ const Register: React.FC = () => {
           type="password"
           required
         />
+        <TextField
+          {...register('confirmPassword')}
+          label="Confirm Password"
+          fullWidth
+          margin="normal"
+          type="password"
+          required
+        />
+
         <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
           Register
         </Button>
