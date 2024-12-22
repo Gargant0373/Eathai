@@ -8,6 +8,7 @@ import "./styles/index.css";
 import PlaceOrder from './pages/PlaceOrder';
 import ViewOrder from './pages/ViewOrder';
 import UserManagement from './pages/UserManagement';
+import VerifyCode from './pages/VerifyCode';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/admin/user-management" element={<UserManagement />} />
         <Route path="/order/place/:id" element={<PlaceOrder />} />
         <Route path="/order/view/:id" element={<ViewOrder />} />
+        <Route path="/verify/:code/:email" element={<VerifyCode/>} />
       </Routes>
     </Router>
   );

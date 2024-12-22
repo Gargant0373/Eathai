@@ -12,7 +12,7 @@ interface RegisterForm {
 }
 
 const Register: React.FC = () => {
-  const { register, handleSubmit, watch } = useForm<RegisterForm>();
+  const { register, handleSubmit } = useForm<RegisterForm>();
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -53,10 +53,10 @@ const Register: React.FC = () => {
           textAlign: 'center',
         }}
       >
-        <img 
-          src="/logo.png" 
-          alt="Logo" 
-          style={{ width: '100px', marginBottom: '20px' }} 
+        <img
+          src="/logo.png"
+          alt="Logo"
+          style={{ width: '100px', marginBottom: '20px' }}
         />
 
         <Typography variant="h5" gutterBottom>

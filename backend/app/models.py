@@ -1,5 +1,6 @@
 from datetime import datetime
 from app import db, bcrypt
+import urllib.parse as urlparse
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -17,7 +18,8 @@ class User(db.Model):
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
         self.is_admin = is_admin
         self.is_approved = is_approved
-        self.email_confirmation_code = bcrypt.generate_password_hash(email).decode()[:15]
+        self.email_confirmation_code = bcrypt.generate_password_hash(email).decode()[:7]
+        print(self.email_confirmation_code)
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password_hash, password)

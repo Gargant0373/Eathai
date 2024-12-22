@@ -154,11 +154,10 @@ def generate_user_email(email, message):
     <body>
         <div class="email-container">
             <div class="header">
-                <h1>Welcome to our Eathai!</h1>
+                <h1>Eathai</h1>
             </div>
             <div class="email-details">
                 <p>{message}</p>
-                <p>Your email is: {email}</p>
             </div>
             <div class="footer">
                 <p>Thank you for using our service!</p>
@@ -169,9 +168,9 @@ def generate_user_email(email, message):
     """
     return html_template.format(email=email, message=message)
 
-def send_user_email(email, message):
+def send_user_email(email, message, subject="Welcome to Eathai!"):
     html_content = generate_user_email(email, message)
-    send_email(email, "Welcome to our Eathai!", html_content)
+    send_email(email, subject, html_content)
     
 def generate_registration_template(email, code, url):
     html_template = """
@@ -237,7 +236,7 @@ def generate_registration_template(email, code, url):
                 <p>Please verify your email address by clicking the link below:</p>
             </div>
             <div class="verify-link">
-                <a href="{url}/verify?code={code}&email={email}" target="_blank">Verify Your Email</a>
+                <a href="{url}/verify/{code}/{email}" target="_blank">Verify Your Email</a>
             </div>
             <div class="footer">
                 <p>If you did not register for this account, you can safely ignore this email.</p>
@@ -250,4 +249,5 @@ def generate_registration_template(email, code, url):
 
 
 def send_registration_email(email, code, url):
-    send_email(email, "Welcome to Eathai! Please verify your email address.", generate_registration_template(email, code, url))
+    import urllib.parse
+    send_email(email, "Welcome to Eathai! Please verify your email address.", generate_registration_template(urllib.parse.quote(email), urllib.parse.quote(code), url))

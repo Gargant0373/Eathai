@@ -24,6 +24,7 @@ interface User {
   email: string;
   is_approved: boolean;
   is_admin: boolean;
+  email_confirmation: boolean;
 }
 
 const UserManagement: React.FC = () => {
@@ -44,6 +45,11 @@ const UserManagement: React.FC = () => {
 
   const handleVerifyUser = async (userId: number) => {
     try {
+      let user = users.filter((user) => user.id === userId)[0];
+      if (user.email_confirmation === false) {
+        alert('User has not confirmed their email yet.');
+        return;
+      }
       await verifyUser(userId);
       setUsers((prev) =>
         prev.map((user) =>
@@ -97,6 +103,7 @@ const UserManagement: React.FC = () => {
           <TableHead>
             <TableRow>
               <TableCell><strong>Email</strong></TableCell>
+              <TableCell><strong>Email Verified</strong></TableCell>
               <TableCell><strong>Approved</strong></TableCell>
               <TableCell><strong>Admin</strong></TableCell>
               <TableCell align="center"><strong>Actions</strong></TableCell>
@@ -106,6 +113,7 @@ const UserManagement: React.FC = () => {
             {users.map((user) => (
               <TableRow key={user.id}>
                 <TableCell>{user.email}</TableCell>
+                <TableCell>{user.email_confirmation ? 'Yes' : 'No'}</TableCell>
                 <TableCell>{user.is_approved ? 'Yes' : 'No'}</TableCell>
                 <TableCell>{user.is_admin ? 'Yes' : 'No'}</TableCell>
                 <TableCell align="center">

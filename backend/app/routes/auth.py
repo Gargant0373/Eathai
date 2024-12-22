@@ -72,13 +72,21 @@ def get_unverified_users():
 @auth_blueprint.route('/verify', methods=['POST'])
 def verify_user_email():
     from app.models import User
-    code = request.args.get('code')
-    email = request.args.get('email')
-    user = User.query.filter_by(email=email, email_confirmation_code=code).first()
+    import urllib.parse as urlparse
     
+    data = request.get_json()
+    code = urlparse.unquote(data.get('code', ''))
+    email = urlparse.unquote(data.get('email', ''))
+    
+    print(code, email)
+    
+    user = User.query.filter_by(email=email).first()
     if not user:
+        return "Invalid email", 400
+    
+    if user.email_confirmation_code != code:
         return "Invalid confirmation code", 400
-
+    
     user.email_confirmation = True
     db.session.commit()
 
@@ -141,7 +149,7 @@ def delete_user(user_id):
     db.session.delete(user)
     db.session.commit()
 
-    send_user_email(user.email, "Your account has been deleted.")
+    send_user_email(user.email, "Your account has been deleted.", "Your account has been deleted...")
     return jsonify({"message": f"User with ID {user_id} has been deleted."}), 200
 
 @auth_blueprint.route('/users', methods=['GET'])
