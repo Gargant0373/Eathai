@@ -1,7 +1,8 @@
 import api from './api';
 
 export const registerUser = async (email: string, password: string) => {
-  const response = await api.post('/auth/register', { email, password });
+  const url = window.location.origin;
+  const response = await api.post('/auth/register', { email, password, url });
   return response.data;
 };
 
@@ -37,5 +38,10 @@ export const getAllUsers = async (page: number = 1) => {
 
 export const getUser = async (userId: number) => {
   const response = await api.get(`/auth/user/${userId}`);
+  return response.data;
+}
+
+export const verifyEmail = async (code: string, email: string) => {
+  const response = await api.post('/auth/verify-email', { code, email });
   return response.data;
 }

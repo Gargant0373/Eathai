@@ -1,7 +1,8 @@
 from flask import Blueprint, request, jsonify
 from app import db
 from app.utils.token_service import generate_token, token_required
-from app.utils.email_service import send_user_email
+from app.utils.email_service import send_registration_email, send_user_email
+from uuid import uuid4
 
 auth_blueprint = Blueprint('auth', __name__)
 
@@ -11,7 +12,9 @@ def register():
     data = request.json
     email = data.get('email')
     password = data.get('password')
-
+    url = data.get('url')
+    print(url)
+    
     if User.query.filter_by(email=email).first():
         return jsonify({"error": "User already exists"}), 400
 
@@ -28,7 +31,7 @@ def register():
     else:
         message = "Registration requested successfully. Await approval."
 
-    send_user_email(email, "You have successfully registered with our platform! Please wait for approval.")
+    send_registration_email(email, new_user.email_confirmation_code, url)
 
     return jsonify({"message": message}), 201
 
@@ -66,6 +69,20 @@ def get_unverified_users():
 
     return jsonify({"unverified_users": users_data}), 200
 
+@auth_blueprint.route('/verify', methods=['POST'])
+def verify_user_email():
+    from app.models import User
+    code = request.args.get('code')
+    email = request.args.get('email')
+    user = User.query.filter_by(email=email, email_confirmation_code=code).first()
+    
+    if not user:
+        return "Invalid confirmation code", 400
+
+    user.email_confirmation = True
+    db.session.commit()
+
+    return "User verified successfully", 200
 
 @auth_blueprint.route('/users/<int:user_id>/verify', methods=['PATCH'])
 @token_required

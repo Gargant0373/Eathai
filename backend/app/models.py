@@ -9,12 +9,15 @@ class User(db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     is_approved = db.Column(db.Boolean, default=False)
     is_admin = db.Column(db.Boolean, default=False)
+    email_confirmation = db.Column(db.Boolean, default=False)
+    email_confirmation_code = db.Column(db.String(100), nullable=True)
 
     def __init__(self, email, password, is_admin=False, is_approved=False):
         self.email = email
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
         self.is_admin = is_admin
         self.is_approved = is_approved
+        self.email_confirmation_code = bcrypt.generate_password_hash(email).decode()[:15]
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password_hash, password)

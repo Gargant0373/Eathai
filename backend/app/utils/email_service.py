@@ -112,7 +112,6 @@ def send_food_email(name, description, price, quantity_available, available_date
     for user in users:
         send_email(user.email, f"{name} has just been posted!", html_content)
 
-
 def generate_user_email(email, message):
     html_template = """
     <html>
@@ -173,3 +172,82 @@ def generate_user_email(email, message):
 def send_user_email(email, message):
     html_content = generate_user_email(email, message)
     send_email(email, "Welcome to our Eathai!", html_content)
+    
+def generate_registration_template(email, code, url):
+    html_template = """
+    <html>
+    <head>
+        <style>
+            .email-container {{
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                max-width: 600px;
+                margin: auto;
+                border: 1px solid #ddd;
+                padding: 20px;
+                background-color: #f9f9f9;
+            }}
+            .header {{
+                text-align: center;
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 0;
+            }}
+            .email-details {{
+                margin-top: 20px;
+            }}
+            .email-details h3 {{
+                margin: 0;
+                color: #4CAF50;
+            }}
+            .email-details p {{
+                margin: 5px 0;
+            }}
+            .verify-link {{
+                display: block;
+                margin: 20px 0;
+                text-align: center;
+            }}
+            .verify-link a {{
+                text-decoration: none;
+                color: white;
+                background-color: #4CAF50;
+                padding: 10px 20px;
+                border-radius: 5px;
+            }}
+            .verify-link a:hover {{
+                background-color: #45a049;
+            }}
+            .footer {{
+                text-align: center;
+                margin-top: 20px;
+                font-size: 12px;
+                color: #aaa;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="email-container">
+            <div class="header">
+                <h1>Verify Your Account</h1>
+            </div>
+            <div class="email-details">
+                <p>Thank you for registering with us!</p>
+                <p>Please verify your email address by clicking the link below:</p>
+            </div>
+            <div class="verify-link">
+                <a href="{url}/verify?code={code}&email={email}" target="_blank">Verify Your Email</a>
+            </div>
+            <div class="footer">
+                <p>If you did not register for this account, you can safely ignore this email.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    return html_template.format(code=code, url=url, email=email)
+
+
+def send_registration_email(email, code, url):
+    send_email(email, "Welcome to Eathai! Please verify your email address.", generate_registration_template(email, code, url))
