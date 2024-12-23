@@ -13,16 +13,16 @@ services:
       - ./backend:/app
     restart: always
     networks:
-      - app-network
+      - eathai-network
 
   frontend:
     build:
       context: ./frontend
     expose:
-      - "6969"
+      - "6969:6969"
     restart: always
     networks:
-      - app-network
+      - eathai-network
 
   nginx:
     image: nginx:stable-alpine
@@ -32,11 +32,11 @@ services:
     ports:
       - "6969:80"
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx.conf:/etc/nginx/nginx.conf
     restart: always
     networks:
-      - app-network
+      - eathai-network
 
 networks:
-  app-network:
+  eathai-network:
     driver: bridge
