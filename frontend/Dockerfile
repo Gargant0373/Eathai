@@ -1,14 +1,15 @@
-# Frontend Dockerfile
-FROM node:16 AS builder
+FROM node:18-alpine
 
 WORKDIR /app
-COPY ./frontend /app
 
-# Install dependencies and build the app
-RUN npm install && npm run build
+COPY package*.json ./
+RUN npm install
 
-# Final stage: Minimal image to store build artifacts
-FROM alpine:latest
+COPY . .
 
-WORKDIR /app
-COPY --from=builder /app/dist /app
+RUN npm i -g serve
+RUN npm run build
+
+EXPOSE 6969
+
+CMD ["serve", "-s", "dist", "-l", "6969"]
