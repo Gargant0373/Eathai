@@ -6,3 +6,4 @@ flask-testing
 PyJWT
 flask-cors
 python-dotenv
+gunicorn

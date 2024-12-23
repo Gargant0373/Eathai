@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Typography, Box, Button, Card, CardContent, Grid, Chip, IconButton } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { getUserOrders, cancelOrder } from '../services/orderService';
-import { Order } from '../models';
-import dayjs from 'dayjs';
-import PendingIcon from '@mui/icons-material/HourglassEmpty';
+import CancelIcon from '@mui/icons-material/Cancel';
 import DoneIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
-import CancelIcon from '@mui/icons-material/Cancel';
+import PendingIcon from '@mui/icons-material/HourglassEmpty';
+import { Box, Button, Card, CardContent, Chip, Grid, IconButton, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { handleFormatDate } from '../components/FoodItemCard';
+import { Order } from '../models';
+import { cancelOrder, getUserOrders } from '../services/orderService';
 
 const ViewOrder: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -120,7 +120,7 @@ const ViewOrder: React.FC = () => {
             </Grid>
             <Grid item xs={12} md={4}>
               <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
-                <strong>Date:</strong>&nbsp; {dayjs(order.timestamp).format('DD/MM/YYYY HH:mm')}
+                <strong>Date:</strong>&nbsp; {handleFormatDate(order.timestamp * 1000)}
               </Typography>
             </Grid>
           </Grid>

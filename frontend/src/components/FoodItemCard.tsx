@@ -7,8 +7,13 @@ interface FoodItemCardProps {
   onPlaceOrder: (foodId: number) => void;
 }
 
+export const handleFormatDate = (date: number) => {
+  return new Date(date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) + " " + new Date(date).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+};
+
 const FoodItemCard: React.FC<FoodItemCardProps> = ({ food, onPlaceOrder }) => {
   const isSoldOut = food.quantity_available === 0;
+
 
   return (
     <Card
@@ -34,11 +39,11 @@ const FoodItemCard: React.FC<FoodItemCardProps> = ({ food, onPlaceOrder }) => {
           left: 8,
         }}
       >
-        <Typography variant="caption" sx={{ color: '#007bff', fontWeight: 500 }}>
+        <Typography variant="caption" sx={{ color: '#777', fontWeight: 500 }}>
           Available:
         </Typography>
         <Typography variant="caption" sx={{ color: '#007bff', fontWeight: 500 }}>
-          {new Date(food.available_date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' })}
+          {handleFormatDate(food.available_date)}
         </Typography>
       </Box>
 
@@ -50,11 +55,11 @@ const FoodItemCard: React.FC<FoodItemCardProps> = ({ food, onPlaceOrder }) => {
             right: 8,
           }}
         >
-          <Typography variant="caption" sx={{ color: '#d32f2f', fontWeight: 500 }}>
+          <Typography variant="caption" sx={{ color: '#777', fontWeight: 500 }}>
             Registration Closes:
           </Typography>
           <Typography variant="caption" sx={{ color: '#d32f2f', fontWeight: 500 }}>
-            {new Date(food.registration_closing).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' })}
+            {handleFormatDate(food.registration_closing)}
           </Typography>
         </Box>
       )}

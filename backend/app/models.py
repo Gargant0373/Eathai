@@ -46,8 +46,14 @@ class Order(db.Model):
     food_id = db.Column(db.Integer, db.ForeignKey('food.id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     status = db.Column(db.String(50), default='pending')
-    timestamp = db.Column(db.BigInteger, default=datetime.now().timestamp())
+    timestamp = db.Column(db.BigInteger, nullable=False)
 
+    def __init__(self, user_id, food_id, quantity):
+        self.user_id = user_id
+        self.food_id = food_id
+        self.quantity = quantity
+        self.timestamp = int(datetime.now().timestamp())
+    
     user = db.relationship('User', backref='orders')
     food = db.relationship('Food', backref='orders')
 

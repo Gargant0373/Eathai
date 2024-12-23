@@ -1,12 +1,12 @@
-import { Container, Grid, Typography, Box } from '@mui/material';
+import { Box, Container, Grid, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FoodItemCard from '../components/FoodItemCard';
+import Navbar from '../components/Navbar';
 import OrderCard from '../components/OrderCard';
 import { FoodItem, Order } from '../models';
 import { getAvailableFood } from '../services/adminService';
-import { getUserOrders, getAllOrders } from '../services/orderService';
-import Navbar from '../components/Navbar';
+import { getUserOrders } from '../services/orderService';
 
 const Main: React.FC = () => {
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
